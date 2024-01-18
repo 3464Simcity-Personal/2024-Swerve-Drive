@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -41,11 +42,15 @@ public class SwerveModule extends SubsystemBase {
     // Offset of the absolute encoder should be value that is passed in. 
     this.absoluteEncoderReversed = absoluteEncoderReversed;
     canCoder = new CANcoder(absoluteEncoderId);
+    CANcoderConfiguration CANCoderConfig = new CANcoderConfiguration();
 
-    // Sets the offset such that the encoder goes back to -180 degrees at the correct time. 
-    canCoder.configMagnetOffset(Units.radiansToDegrees(-absoluteEncoderOffset));
+    // Sets the offset such that the encoder goes back to -180 degrees at the correct time.
+   
 
-    driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
+
+    CANCoderConfig.MagnetSensor.MagnetOffset = Units.radiansToDegrees(-absoluteEncoderOffset);
+    // canCoder.configMagnetOffset(Units.radiansToDegrees(-absoluteEncoderOffset));
+
     driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
     turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
 
