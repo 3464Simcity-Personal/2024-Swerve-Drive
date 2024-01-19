@@ -48,7 +48,6 @@ public class RobotContainer {
 
  
   private void configureBindings() {
-    
     Constants.OperatorConstants.buttonX.onTrue(resetGyro);
     
   }
@@ -64,7 +63,8 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)), // Starting Pose
       List.of(
-        new Translation2d(1, .5), new Translation2d(2, -.5)), 
+        new Translation2d(1, .5), 
+        new Translation2d(2, -.5)), 
         // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
         new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
         trajectoryConfig); // Apply trajectory settings to path

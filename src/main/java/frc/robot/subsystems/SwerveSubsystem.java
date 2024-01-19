@@ -137,22 +137,28 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Robot Heading", getHeading());
     SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
 
-    SmartDashboard.putNumber("Front Left Absolute Encoder", frontLeft.getAbsoluteEncoderRad());
-    SmartDashboard.putNumber("Front Right Absolute Encoder", frontRight.getAbsoluteEncoderRad());
-    SmartDashboard.putNumber("Back Left Absolute Encoder", backLeft.getAbsoluteEncoderRad());
-    SmartDashboard.putNumber("Back Right Absolute Encoder", backRight.getAbsoluteEncoderRad());
-    
-    SmartDashboard.putNumber("Front Left Relative Encoder", frontLeft.getTurningPosition());
-    SmartDashboard.putNumber("Front Left Relative Degrees", Units.radiansToDegrees(frontLeft.getTurningPosition()));
-    
-    SmartDashboard.putNumber("Front Right Relative Encoder", frontRight.getTurningPosition());
-    SmartDashboard.putNumber("Back Left Relative Encoder", backLeft.getTurningPosition());
-    SmartDashboard.putNumber("Back Right Relative Encoder", backRight.getTurningPosition());
+    // SmartDashboard.putNumber("Front Left Absolute Encoder", Units.rotationsToDegrees(frontLeft.getAbsoluteEncoderRot()));
+    // SmartDashboard.putNumber("Front Right Absolute Encoder",  Units.rotationsToDegrees(frontRight.getAbsoluteEncoderRot()));
+    // SmartDashboard.putNumber("Back Left Absolute Encoder",  Units.rotationsToDegrees(backLeft.getAbsoluteEncoderRot()));
+    // SmartDashboard.putNumber("Back Right Absolute Encoder",  Units.rotationsToDegrees(backRight.getAbsoluteEncoderRot()));
 
-    SmartDashboard.putNumber("Front Left Drive Position", frontLeft.getDrivePosition());
-    SmartDashboard.putNumber("Front Right Drive Position", frontRight.getDrivePosition());
-    SmartDashboard.putNumber("Back Left Drive Position", backLeft.getDrivePosition());
-    SmartDashboard.putNumber("Back Right Drive Position", backRight.getDrivePosition());
+    SmartDashboard.putNumber("Front Left Absolute Encoder", frontLeft.getAbsoluteEncoderRot());
+    SmartDashboard.putNumber("Front Right Absolute Encoder",  frontRight.getAbsoluteEncoderRot());
+    SmartDashboard.putNumber("Back Left Absolute Encoder",  backLeft.getAbsoluteEncoderRot());
+    SmartDashboard.putNumber("Back Right Absolute Encoder", backRight.getAbsoluteEncoderRot());
+
+
+
+    // SmartDashboard.putNumber("Front Left Relative Encoder", frontLeft.getTurningPosition());
+    SmartDashboard.putNumber("Front Left Relative Encoder", Units.radiansToDegrees(frontLeft.getTurningPosition()));
+    SmartDashboard.putNumber("Front Right Relative Encoder", Units.radiansToDegrees(frontRight.getTurningPosition()));
+    SmartDashboard.putNumber("Back Left Relative Encoder", Units.radiansToDegrees(backLeft.getTurningPosition()));
+    SmartDashboard.putNumber("Back Right Relative Encoder", Units.radiansToDegrees(backRight.getTurningPosition()));
+
+    // SmartDashboard.putNumber("Front Left Drive Position", frontLeft.getDrivePosition());
+    // SmartDashboard.putNumber("Front Right Drive Position", frontRight.getDrivePosition());
+    // SmartDashboard.putNumber("Back Left Drive Position", backLeft.getDrivePosition());
+    // SmartDashboard.putNumber("Back Right Drive Position", backRight.getDrivePosition());
 
 
     // Update our robot's position so we can see it too. 
