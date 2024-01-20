@@ -62,12 +62,11 @@ public class RobotContainer {
 
     // Trajectory Generation using WPILIB
     Trajectory moveToFirst = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)), // Starting Pose
+      new Pose2d(0, 0, Rotation2d.fromDegrees(90)), // Starting Pose
       List.of(
-        new Translation2d(Units.inchesToMeters(13), 0), 
-        new Translation2d(2, -.5)), 
+        new Translation2d(Units.inchesToMeters(13), 0)), 
         // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
-        new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+        new Pose2d(Units.inchesToMeters(42), -Units.inchesToMeters(27.5), Rotation2d.fromDegrees(180)),
         trajectoryConfig); // Apply trajectory settings to path
 
       // define pid controllers for tracking trajectory = creates speeds to correct for error. 
