@@ -20,12 +20,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 public class RobotContainer {
@@ -60,14 +62,21 @@ public class RobotContainer {
           .setKinematics(DriveConstants.kDriveKinematics);
 
     // Trajectory Generation using WPILIB
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)), // Starting Pose
-      List.of(
-        new Translation2d(1, .5), 
-        new Translation2d(2, -.5)), 
+    Trajectory moveNo3 = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0, new Rotation2d(0)), null, 
+     new Pose2d(0, Units.inchesToMeters(49), Rotation2d.fromDegrees(90)), trajectoryConfig);
+
+    Trajectory moveNo2 = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0, new Rotation2d(0)), null, 
+     new Pose2d(0, Units.inchesToMeters(49), Rotation2d.fromDegrees(90)), trajectoryConfig);
+
+    Trajectory moveNo1 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)), null, // Starting Pose
+      // List.of(),
+      //   new Translation2d(1, .5), 
+      //   new Translation2d(2, -.5)), 
         // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
-        new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+        new Pose2d(Units.inchesToMeters(59.875), 0, Rotation2d.fromDegrees(0)),
         trajectoryConfig); // Apply trajectory settings to path
+      
 
       // define pid controllers for tracking trajectory = creates speeds to correct for error. 
       PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
@@ -82,8 +91,18 @@ public class RobotContainer {
       thetaController.enableContinuousInput(-Math.PI, Math.PI);  
 
       // contruct command to follow trajectory
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        trajectory, 
+      SwerveControllerCommand moveNo1EEE = new SwerveControllerCommand(
+        moveNo1, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      SwerveControllerCommand moveNo2EEE = new SwerveControllerCommand(
+        moveNo2, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -95,9 +114,13 @@ public class RobotContainer {
     // add some init and wrap up, and return everything
     return new SequentialCommandGroup(
       // Reset odometry to starting pose. 
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-      swerveControllerCommand,
-      new InstantCommand(() -> swerveSubsystem.stopModules())
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(moveNo1.getInitialPose())),
+      moveNo1EEE,
+      new InstantCommand(() -> swerveSubsystem.stopModules()),
+      new WaitCommand(3),
+      moveNo2EEE,
+      new WaitCommand(3)
+
     );
   }
 }
