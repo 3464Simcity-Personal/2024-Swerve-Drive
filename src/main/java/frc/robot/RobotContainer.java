@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -60,10 +61,10 @@ public class RobotContainer {
           .setKinematics(DriveConstants.kDriveKinematics);
 
     // Trajectory Generation using WPILIB
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+    Trajectory moveToFirst = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)), // Starting Pose
       List.of(
-        new Translation2d(1, .5), 
+        new Translation2d(Units.inchesToMeters(13), 0), 
         new Translation2d(2, -.5)), 
         // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
         new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
@@ -83,7 +84,7 @@ public class RobotContainer {
 
       // contruct command to follow trajectory
       SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        trajectory, 
+        moveToFirst, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -95,7 +96,7 @@ public class RobotContainer {
     // add some init and wrap up, and return everything
     return new SequentialCommandGroup(
       // Reset odometry to starting pose. 
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(moveToFirst.getInitialPose())),
       swerveControllerCommand,
       new InstantCommand(() -> swerveSubsystem.stopModules())
     );
