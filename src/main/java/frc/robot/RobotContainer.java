@@ -60,15 +60,7 @@ public class RobotContainer {
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
           .setKinematics(DriveConstants.kDriveKinematics);
 
-    // Trajectory Generation using WPILIB
-    Trajectory moveToFirst = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, Rotation2d.fromDegrees(90)), // Starting Pose
-      List.of(
-        new Translation2d(Units.inchesToMeters(13), 0)), 
-        // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
-        new Pose2d(Units.inchesToMeters(42), -Units.inchesToMeters(27.5), Rotation2d.fromDegrees(180)),
-        trajectoryConfig); // Apply trajectory settings to path
-
+   
       // define pid controllers for tracking trajectory = creates speeds to correct for error. 
       PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
       PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
@@ -81,7 +73,19 @@ public class RobotContainer {
         AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);  
 
-      // contruct command to follow trajectory
+
+
+     // Trajectory Generation using WPILIB
+    Trajectory moveToFirst = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, Rotation2d.fromDegrees(90)), // Starting Pose
+      List.of(
+        new Translation2d(Units.inchesToMeters(15), -Units.inchesToMeters(2))), 
+        // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
+        new Pose2d(Units.inchesToMeters(42), -Units.inchesToMeters(27.5), Rotation2d.fromDegrees(180)),
+        trajectoryConfig); // Apply trajectory settings to path
+
+
+          // contruct command to follow trajectory
       SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
         moveToFirst, 
         swerveSubsystem::getPose, // Coords
@@ -92,11 +96,13 @@ public class RobotContainer {
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
 
+
     // add some init and wrap up, and return everything
     return new SequentialCommandGroup(
       // Reset odometry to starting pose. 
       new InstantCommand(() -> swerveSubsystem.resetOdometry(moveToFirst.getInitialPose())),
       swerveControllerCommand,
+
       new InstantCommand(() -> swerveSubsystem.stopModules())
     );
   }
