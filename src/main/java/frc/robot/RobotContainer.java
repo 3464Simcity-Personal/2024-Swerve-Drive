@@ -74,20 +74,28 @@ public class RobotContainer {
       thetaController.enableContinuousInput(-Math.PI, Math.PI);  
 
 
+    // Start HERE:
 
      // Trajectory Generation using WPILIB
-    Trajectory moveToFirst = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, Rotation2d.fromDegrees(90)), // Starting Pose
+    Trajectory originToAmptoNote = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(1.41732, 0.920496 , Rotation2d.fromDegrees(90)), // Starting Pose
+    //   List.of(
+    //       new Translation2d(2.41732, 0.920496),
+    //       new Translation2d(0.41732, 0.920496)),
+    //       new Pose2d(1.41732, 0.920496, Rotation2d.fromDegrees(90)
+    // ),
       List.of(
-        new Translation2d(Units.inchesToMeters(15), -Units.inchesToMeters(2))), 
+        new Translation2d(1.844802, 0.47879),
+        new Translation2d(1.844802, 1.212596)),
+        new Pose2d(2.87528, 1.212596, Rotation2d.fromDegrees(90)
+      ),
         // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
-        new Pose2d(Units.inchesToMeters(42), -Units.inchesToMeters(27.5), Rotation2d.fromDegrees(180)),
         trajectoryConfig); // Apply trajectory settings to path
 
 
           // contruct command to follow trajectory
       SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        moveToFirst, 
+        originToAmptoNote, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -100,9 +108,8 @@ public class RobotContainer {
     // add some init and wrap up, and return everything
     return new SequentialCommandGroup(
       // Reset odometry to starting pose. 
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(moveToFirst.getInitialPose())),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(originToAmptoNote.getInitialPose())),
       swerveControllerCommand,
-
       new InstantCommand(() -> swerveSubsystem.stopModules())
     );
   }
