@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 public class RobotContainer {
@@ -51,7 +52,7 @@ public class RobotContainer {
  
   private void configureBindings() {
     Constants.OperatorConstants.buttonX.onTrue(resetGyro);
-    Constants.OperatorConstants.buttonY.onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(90)))));
+    Constants.OperatorConstants.buttonY.onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-90)))));
   }
 
   public Command getAutonomousCommand() {
@@ -76,19 +77,57 @@ public class RobotContainer {
 
 
     // Start HERE:
-    Trajectory ampToAmpNote = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), List.of(new Translation2d(1, 0), new Translation2d(1,0)), 
-    new Pose2d(1, 0, Rotation2d.fromDegrees(0)), trajectoryConfig);
-     // Trajectory Generation using WPILIB
-    Trajectory originToAmptoNote = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
-      List.of(new Translation2d(0, 0.1), new Translation2d(0.4,0.4)), // Starting Pose
-      new Pose2d(0.43, 0.55, Rotation2d.fromDegrees(90)),
+
+    Trajectory tragOriginToAmptoNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.427, 0.451, Rotation2d.fromDegrees(-90))),
       trajectoryConfig); // Apply trajectory settings to path
 
+      Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.9, -0.6, Rotation2d.fromDegrees(-40)),
+      new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-40))), trajectoryConfig);
+    // Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(
+    //   new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+    //   List.of(new Translation2d(0.5, -0.1), new Translation2d(1.03,-0.15)), 
+    //   new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-90)), trajectoryConfig);
+    //  // Trajectory Generation using WPILIB
+      
+    Trajectory tragAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(-1.03, 0.74, Rotation2d.fromDegrees(-90))), trajectoryConfig);
+    //  Trajectory tragAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
+    //   new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+    //   List.of(new Translation2d(-0.5, 0.37), new Translation2d(-1.03,0.38)), 
+    //   new Pose2d(-1.03, 0.74, Rotation2d.fromDegrees(-90)), trajectoryConfig);
+    
+    // Trajectory testWooHoo = TrajectoryGenerator.generateTrajectory(
+    //   List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+    //   new Pose2d(1, 0, Rotation2d.fromDegrees(0))), 
+    //   trajectoryConfig);
 
           // contruct command to follow trajectory
       SwerveControllerCommand orginToAmp = new SwerveControllerCommand(
-        originToAmptoNote , 
+        tragOriginToAmptoNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      SwerveControllerCommand ampToAmpN = new SwerveControllerCommand(
+        tragAmpToAmpNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      SwerveControllerCommand ampNToAmp = new SwerveControllerCommand(
+        tragAmpNoteToAmp, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -101,8 +140,15 @@ public class RobotContainer {
     // add some init and wrap up, and return everything
     return new SequentialCommandGroup(
       // Reset odometry to starting pose. 
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(originToAmptoNote.getInitialPose())),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToAmptoNote.getInitialPose())),
       orginToAmp,
+      new InstantCommand(() -> swerveSubsystem.stopModules()),
+      new WaitCommand(0.25),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToAmpNote.getInitialPose())),
+      ampToAmpN,
+      new WaitCommand(0.25),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteToAmp.getInitialPose())),
+      ampNToAmp,
       new InstantCommand(() -> swerveSubsystem.stopModules())
     );
   }
