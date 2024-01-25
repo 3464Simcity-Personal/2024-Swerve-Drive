@@ -35,6 +35,7 @@ public class RobotContainer {
   
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final InstantCommand resetGyro = new InstantCommand(swerveSubsystem::zeroHeading, swerveSubsystem);
+  // private final InstantCommand resetLocation = new InstantCommand(swerveSubsystem::resetOdom)
   private final SwerveJoystickCMD swerveCMD = new SwerveJoystickCMD(swerveSubsystem,
                 () -> -xbox.getRawAxis(OIConstants.kDriverYAxis),
                 () -> xbox.getRawAxis(OIConstants.kDriverXAxis),
@@ -50,7 +51,7 @@ public class RobotContainer {
  
   private void configureBindings() {
     Constants.OperatorConstants.buttonX.onTrue(resetGyro);
-    
+    Constants.OperatorConstants.buttonY.onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(90)))));
   }
 
   public Command getAutonomousCommand() {
@@ -75,27 +76,19 @@ public class RobotContainer {
 
 
     // Start HERE:
-
+    Trajectory ampToAmpNote = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), List.of(new Translation2d(1, 0), new Translation2d(1,0)), 
+    new Pose2d(1, 0, Rotation2d.fromDegrees(0)), trajectoryConfig);
      // Trajectory Generation using WPILIB
     Trajectory originToAmptoNote = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(1.41732, 0.920496 , Rotation2d.fromDegrees(90)), // Starting Pose
-    //   List.of(
-    //       new Translation2d(2.41732, 0.920496),
-    //       new Translation2d(0.41732, 0.920496)),
-    //       new Pose2d(1.41732, 0.920496, Rotation2d.fromDegrees(90)
-    // ),
-      List.of(
-        new Translation2d(1.844802, 0.47879),
-        new Translation2d(1.844802, 1.212596)),
-        new Pose2d(2.87528, 1.212596, Rotation2d.fromDegrees(90)
-      ),
-        // new Pose2d(3, 0, Rotation2d.fromDegrees(180)),
-        trajectoryConfig); // Apply trajectory settings to path
+      new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
+      List.of(new Translation2d(0, 0.1), new Translation2d(0.4,0.4)), // Starting Pose
+      new Pose2d(0.43, 0.55, Rotation2d.fromDegrees(90)),
+      trajectoryConfig); // Apply trajectory settings to path
 
 
           // contruct command to follow trajectory
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        originToAmptoNote, 
+      SwerveControllerCommand orginToAmp = new SwerveControllerCommand(
+        originToAmptoNote , 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -109,7 +102,7 @@ public class RobotContainer {
     return new SequentialCommandGroup(
       // Reset odometry to starting pose. 
       new InstantCommand(() -> swerveSubsystem.resetOdometry(originToAmptoNote.getInitialPose())),
-      swerveControllerCommand,
+      orginToAmp,
       new InstantCommand(() -> swerveSubsystem.stopModules())
     );
   }
