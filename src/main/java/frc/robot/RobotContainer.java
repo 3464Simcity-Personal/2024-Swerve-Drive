@@ -16,12 +16,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,9 +31,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
 public class RobotContainer {
+  private final SendableChooser<String> commandChooser = new SendableChooser<>();
+  public SequentialCommandGroup selectedAuto;
   private final XboxController xbox = new XboxController(3);
 
-  
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final InstantCommand resetGyro = new InstantCommand(swerveSubsystem::zeroHeading, swerveSubsystem);
   // private final InstantCommand resetLocation = new InstantCommand(swerveSubsystem::resetOdom)
@@ -45,6 +46,9 @@ public class RobotContainer {
                 () -> !xbox.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx */);
 
   public RobotContainer() {
+    commandChooser.setDefaultOption("Red 3 Amp ", "R3A");
+    commandChooser.addOption("Red 3 Amp Hail Mary", "R3AHM");
+    SmartDashboard.putData("Auto", commandChooser);
     CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, swerveCMD);
     configureBindings();
   }
@@ -74,9 +78,6 @@ public class RobotContainer {
         0,
         AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);  
-
-
-    // Start HERE:
 
     Trajectory tragOriginToAmp = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
@@ -159,29 +160,50 @@ public class RobotContainer {
         swerveSubsystem);
 
 
-    // add some init and wrap up, and return everything
-    return new SequentialCommandGroup(
-      // Reset odometry to starting pose. 
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToAmp.getInitialPose())),
-      orginToAmp,
-      new InstantCommand(() -> swerveSubsystem.stopModules()),
-      new WaitCommand(0.25),
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToAmpNote.getInitialPose())),
-      ampToAmpN,
-      new InstantCommand(() -> swerveSubsystem.stopModules()),
-      new WaitCommand(0.25),
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteToAmp.getInitialPose())),
-      ampNToAmp,
-      new InstantCommand(() -> swerveSubsystem.stopModules()),
-      new WaitCommand(0.25),
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToSpeakerNote.getInitialPose())),
-      ampToSpeaker,
-      new InstantCommand(() -> swerveSubsystem.stopModules()),
-      new WaitCommand(0.25),
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerNoteToAmp.getInitialPose())),
-      speakerNoteToAmp,
-      new InstantCommand(() -> swerveSubsystem.stopModules())
+    // Start HERE:
+    if (commandChooser.getSelected() == "R3A"){
+      // add some init and wrap up, and return everything
+      selectedAuto = new SequentialCommandGroup(
+        // Reset odometry to starting pose. 
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToAmp.getInitialPose())),
+        orginToAmp,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToAmpNote.getInitialPose())),
+        ampToAmpN,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteToAmp.getInitialPose())),
+        ampNToAmp,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToSpeakerNote.getInitialPose())),
+        ampToSpeaker,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerNoteToAmp.getInitialPose())),
+        speakerNoteToAmp,
+        new InstantCommand(() -> swerveSubsystem.stopModules()));
+    }else if (commandChooser.getSelected() == "R3AHM"){
+            // add some init and wrap up, and return everything
+        selectedAuto = new SequentialCommandGroup(
+          // Reset odometry to starting pose. 
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToAmp.getInitialPose())),
+          orginToAmp,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToAmpNote.getInitialPose())),
+          ampToAmpN,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteToAmp.getInitialPose())),
+          ampNToAmp,
+          new InstantCommand(() -> swerveSubsystem.stopModules())
+        );
+    }else{
+        selectedAuto = null;
+    }
 
-    );
+    return selectedAuto;
   }
 }
