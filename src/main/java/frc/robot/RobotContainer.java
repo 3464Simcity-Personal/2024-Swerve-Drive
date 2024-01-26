@@ -78,36 +78,37 @@ public class RobotContainer {
 
     // Start HERE:
 
-    Trajectory tragOriginToAmptoNote = TrajectoryGenerator.generateTrajectory(
+    Trajectory tragOriginToAmp = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
       new Pose2d(0.427, 0.451, Rotation2d.fromDegrees(-90))),
       trajectoryConfig); // Apply trajectory settings to path
 
-      Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+
+    Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
       new Pose2d(0.9, -0.6, Rotation2d.fromDegrees(-40)),
-      new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-40))), trajectoryConfig);
-    // Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(
-    //   new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
-    //   List.of(new Translation2d(0.5, -0.1), new Translation2d(1.03,-0.15)), 
-    //   new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-90)), trajectoryConfig);
-    //  // Trajectory Generation using WPILIB
+      new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-40))), 
+      trajectoryConfig);
       
     Trajectory tragAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-40)), 
+      new Pose2d(-0.9, 0.6, Rotation2d.fromDegrees(90)),
       new Pose2d(-1.03, 0.74, Rotation2d.fromDegrees(-90))), trajectoryConfig);
-    //  Trajectory tragAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
-    //   new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
-    //   List.of(new Translation2d(-0.5, 0.37), new Translation2d(-1.03,0.38)), 
-    //   new Pose2d(-1.03, 0.74, Rotation2d.fromDegrees(-90)), trajectoryConfig);
-    
-    // Trajectory testWooHoo = TrajectoryGenerator.generateTrajectory(
-    //   List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-    //   new Pose2d(1, 0, Rotation2d.fromDegrees(0))), 
-    //   trajectoryConfig);
+
+    Trajectory tragAmpToSpeakerNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.5, -2.178, Rotation2d.fromDegrees(-90)),
+    new Pose2d(1.055, -2.178, Rotation2d.fromDegrees(0))), trajectoryConfig);
+
+    Trajectory tragSpeakerNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.8, 0, Rotation2d.fromDegrees(-90)),
+      new Pose2d(-1.055, 2.2, Rotation2d.fromDegrees(-90))), 
+      trajectoryConfig);
 
           // contruct command to follow trajectory
       SwerveControllerCommand orginToAmp = new SwerveControllerCommand(
-        tragOriginToAmptoNote, 
+        tragOriginToAmp, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -115,6 +116,17 @@ public class RobotContainer {
         thetaController,
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
+
+      SwerveControllerCommand ampToSpeaker = new SwerveControllerCommand(
+        tragAmpToSpeakerNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
 
       SwerveControllerCommand ampToAmpN = new SwerveControllerCommand(
         tragAmpToAmpNote, 
@@ -135,21 +147,41 @@ public class RobotContainer {
         thetaController,
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
+      
+      SwerveControllerCommand speakerNoteToAmp = new SwerveControllerCommand(
+        tragSpeakerNoteToAmp, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
 
 
     // add some init and wrap up, and return everything
     return new SequentialCommandGroup(
       // Reset odometry to starting pose. 
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToAmptoNote.getInitialPose())),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToAmp.getInitialPose())),
       orginToAmp,
       new InstantCommand(() -> swerveSubsystem.stopModules()),
       new WaitCommand(0.25),
       new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToAmpNote.getInitialPose())),
       ampToAmpN,
+      new InstantCommand(() -> swerveSubsystem.stopModules()),
       new WaitCommand(0.25),
       new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteToAmp.getInitialPose())),
       ampNToAmp,
+      new InstantCommand(() -> swerveSubsystem.stopModules()),
+      new WaitCommand(0.25),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToSpeakerNote.getInitialPose())),
+      ampToSpeaker,
+      new InstantCommand(() -> swerveSubsystem.stopModules()),
+      new WaitCommand(0.25),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerNoteToAmp.getInitialPose())),
+      speakerNoteToAmp,
       new InstantCommand(() -> swerveSubsystem.stopModules())
+
     );
   }
 }
