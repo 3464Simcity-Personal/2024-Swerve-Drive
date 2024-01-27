@@ -81,15 +81,13 @@ public class RobotContainer {
 
     Trajectory tragOriginToAmp = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
-      new Pose2d(0.427, 0.451, Rotation2d.fromDegrees(-90))),
-      trajectoryConfig); // Apply trajectory settings to path
+      new Pose2d(0.427, 0.451, Rotation2d.fromDegrees(-90))), trajectoryConfig); // Apply trajectory settings to path
 
 
     Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
       new Pose2d(0.9, -0.6, Rotation2d.fromDegrees(-40)),
-      new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-40))), 
-      trajectoryConfig);
+      new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-40))), trajectoryConfig);
       
     Trajectory tragAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-40)), 
@@ -99,13 +97,22 @@ public class RobotContainer {
     Trajectory tragAmpToSpeakerNote = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
       new Pose2d(0.5, -2.178, Rotation2d.fromDegrees(-90)),
-    new Pose2d(1.055, -2.178, Rotation2d.fromDegrees(0))), trajectoryConfig);
+      new Pose2d(1.055, -2.178, Rotation2d.fromDegrees(0))), trajectoryConfig);
 
     Trajectory tragSpeakerNoteToAmp = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.8, 0, Rotation2d.fromDegrees(-90)),
-      new Pose2d(-1.055, 2.2, Rotation2d.fromDegrees(-90))), 
-      trajectoryConfig);
+      new Pose2d(-0.8, 1.2, Rotation2d.fromDegrees(-90)),
+      new Pose2d(-1.055, 2.2, Rotation2d.fromDegrees(-90))), trajectoryConfig);
+
+    Trajectory tragAmpToHailMaryNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)),
+      new Pose2d(5.5, -0.282, Rotation2d.fromDegrees(0)),
+      new Pose2d(6.424, -0.282, Rotation2d.fromDegrees(0))), trajectoryConfig);
+    
+    Trajectory tragHailMaryNoteToAmpM1 = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+      new Pose2d(-6.4, -0.5, Rotation2d.fromDegrees(180)),
+      new Pose2d(-6.4, 0.283, Rotation2d.fromDegrees(270))), trajectoryConfig);
 
           // contruct command to follow trajectory
       SwerveControllerCommand orginToAmp = new SwerveControllerCommand(
@@ -159,6 +166,46 @@ public class RobotContainer {
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
 
+      SwerveControllerCommand ampToRightmostNote = new SwerveControllerCommand(
+        tragAmpToHailMaryNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      SwerveControllerCommand rightmostNoteToAmpM1 = new SwerveControllerCommand(
+        tragHailMaryNoteToAmpM1, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      // SwerveControllerCommand rightmostNoteToAmpM2 = new SwerveControllerCommand(
+      //   tragHailMaryNoteToAmpM2, 
+      //   swerveSubsystem::getPose, // Coords
+      //   DriveConstants.kDriveKinematics, 
+      //   xController, 
+      //   yController,
+      //   thetaController,
+      //   swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+      //   swerveSubsystem);
+
+      // SwerveControllerCommand rightmostNoteToAmpM3 = new SwerveControllerCommand(
+      //   tragHailMaryNoteToAmpM3, 
+      //   swerveSubsystem::getPose, // Coords
+      //   DriveConstants.kDriveKinematics, 
+      //   xController, 
+      //   yController,
+      //   thetaController,
+      //   swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+      //   swerveSubsystem);
+
 
     // Start HERE:
     if (commandChooser.getSelected() == "R3A"){
@@ -184,7 +231,9 @@ public class RobotContainer {
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerNoteToAmp.getInitialPose())),
         speakerNoteToAmp,
         new InstantCommand(() -> swerveSubsystem.stopModules()));
+
     }else if (commandChooser.getSelected() == "R3AHM"){
+        // HAIL MARY
             // add some init and wrap up, and return everything
         selectedAuto = new SequentialCommandGroup(
           // Reset odometry to starting pose. 
@@ -198,6 +247,15 @@ public class RobotContainer {
           new WaitCommand(0.25),
           new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteToAmp.getInitialPose())),
           ampNToAmp,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpToHailMaryNote.getInitialPose())),
+          ampToRightmostNote,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(tragHailMaryNoteToAmpM1.getInitialPose())),
+          new WaitCommand(0.25),
+          rightmostNoteToAmpM1,
           new InstantCommand(() -> swerveSubsystem.stopModules())
         );
     }else{
