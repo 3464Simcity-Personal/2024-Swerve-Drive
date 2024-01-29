@@ -117,6 +117,15 @@ public class SwerveModule extends SubsystemBase {
     return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition())); 
   }
 
+  public double getDriveCurrent(){
+    return driveMotor.getOutputCurrent();
+  }
+
+  public double getTurnCurrent(){
+    return turningMotor.getOutputCurrent();
+  }
+
+
   // Method that translate desired state to angle rotations and speed. 
   public void setDesiredState(SwerveModuleState state) {
     if (Math.abs(state.speedMetersPerSecond) < 0.001) {
