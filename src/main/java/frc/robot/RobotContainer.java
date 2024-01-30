@@ -113,6 +113,7 @@ public class RobotContainer {
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
       new Pose2d(-6.4, -0.5, Rotation2d.fromDegrees(180)),
       new Pose2d(-6.4, 0.283, Rotation2d.fromDegrees(270))), trajectoryConfig);
+    
 
           // contruct command to follow trajectory
       SwerveControllerCommand orginToAmp = new SwerveControllerCommand(
@@ -185,26 +186,6 @@ public class RobotContainer {
         thetaController,
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
-
-      // SwerveControllerCommand rightmostNoteToAmpM2 = new SwerveControllerCommand(
-      //   tragHailMaryNoteToAmpM2, 
-      //   swerveSubsystem::getPose, // Coords
-      //   DriveConstants.kDriveKinematics, 
-      //   xController, 
-      //   yController,
-      //   thetaController,
-      //   swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
-      //   swerveSubsystem);
-
-      // SwerveControllerCommand rightmostNoteToAmpM3 = new SwerveControllerCommand(
-      //   tragHailMaryNoteToAmpM3, 
-      //   swerveSubsystem::getPose, // Coords
-      //   DriveConstants.kDriveKinematics, 
-      //   xController, 
-      //   yController,
-      //   thetaController,
-      //   swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
-      //   swerveSubsystem);
 
 
     // Start HERE:
