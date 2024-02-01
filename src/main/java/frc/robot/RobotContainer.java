@@ -325,14 +325,22 @@ public class RobotContainer {
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToStageNote.getInitialPose())),
         originToStageNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
+        // Go to Speaker Note
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragStageNoteToSpeakerShooting.getInitialPose())),
         stageNoteToSpeakerShooting,
         new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.stopModules()),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerShootingToSpeakerNote.getInitialPose())),
         speakerShootingToSpeakerNote,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        // Go to Amp Note
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerNoteToAmpShooting.getInitialPose())),
+        speakerNoteToAmpShooting,
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpShootingToAmpNote.getInitialPose())),
+        ampShootingToAmpNote,
         new InstantCommand(() -> swerveSubsystem.stopModules())
-        
         );
 
     }else{
