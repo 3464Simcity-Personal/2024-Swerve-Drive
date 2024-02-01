@@ -58,7 +58,7 @@ public class RobotContainer {
  
   private void configureBindings() {
     Constants.OperatorConstants.buttonX.onTrue(resetGyro);
-    Constants.OperatorConstants.buttonY.onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-90)))));
+    Constants.OperatorConstants.buttonY.onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)))));
   }
 
   public Command getAutonomousCommand() {
@@ -195,13 +195,13 @@ public class RobotContainer {
 
     Trajectory tragOriginToStageNote = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0.508, -1.2954, Rotation2d.fromDegrees(0)),
-      new Pose2d(1.3462, -1.2954, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-  
-    Trajectory tragStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0.508, -1.4478, Rotation2d.fromDegrees(0)),
+      new Pose2d(1.3462, -1.4478, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+   
+      Trajectory tragStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.508, 2.8956, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.508, 2.8956, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
       Trajectory tragSpeakerShootingToSpeakerNote = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
@@ -209,7 +209,7 @@ public class RobotContainer {
 
     
     SwerveControllerCommand originToStageNote = new SwerveControllerCommand(
-        tragStageNoteToSpeakerShooting, 
+        tragOriginToStageNote, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -219,7 +219,7 @@ public class RobotContainer {
         swerveSubsystem);
         
     SwerveControllerCommand stageNoteToSpeakerShooting = new SwerveControllerCommand(
-        tragOriginToStageNote, 
+        tragStageNoteToSpeakerShooting, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -295,8 +295,10 @@ public class RobotContainer {
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToStageNote.getInitialPose())),
         originToStageNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragStageNoteToSpeakerShooting.getInitialPose())),
         stageNoteToSpeakerShooting,
+        new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.stopModules()),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerShootingToSpeakerNote.getInitialPose())),
         speakerShootingToSpeakerNote,
