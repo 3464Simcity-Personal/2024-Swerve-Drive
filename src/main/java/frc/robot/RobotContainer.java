@@ -218,7 +218,7 @@ public class RobotContainer {
 
       Trajectory tragAmpNoteRotateToSpeaker = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0, 0, Rotation2d.fromDegrees(25))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+      new Pose2d(-0.1, 0, Rotation2d.fromDegrees(25))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
 
       
@@ -340,29 +340,32 @@ public class RobotContainer {
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToStageNote.getInitialPose())),
         originToStageNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
         // Go to Speaker Note
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragStageNoteToSpeakerShooting.getInitialPose())),
         stageNoteToSpeakerShooting,
         new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.125),
+        new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerShootingToSpeakerNote.getInitialPose())),
         speakerShootingToSpeakerNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+
         // Go to Amp Note
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerNoteToAmpShooting.getInitialPose())),
         speakerNoteToAmpShooting,
-        new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.125),
+        new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpShootingToAmpNote.getInitialPose())),
         ampShootingToAmpNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
         // Rotate to speaker
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteRotateToSpeaker.getInitialPose())),
         ampNoteRotateToSpeaker,
-        new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.25)
+        new InstantCommand(() -> swerveSubsystem.stopModules())
+        // new WaitCommand(0.25)
         );
 
     }else{
