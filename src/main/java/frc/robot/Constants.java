@@ -115,7 +115,7 @@ public static final class AutoConstants {
   public static final double kMaxAccelerationMetersPerSecondSquared = 3;
   public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
   public static final double kPXController = 1.5;
-  public static final double kPYController = 1.5;
+  public static final double kPYController = 0.9;
   public static final double kPThetaController = 3.75 ;
 
   public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
@@ -141,5 +141,6 @@ public static final class OIConstants {
     public static final JoystickButton button2 = new JoystickButton(auxStick, 2);
     public static final XboxController xbox = new XboxController(3);
     public static final JoystickButton buttonX = new JoystickButton(xbox, 3);
+    public static final JoystickButton buttonY = new JoystickButton(xbox, 4);
   }
 }
