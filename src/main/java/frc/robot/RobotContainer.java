@@ -207,7 +207,17 @@ public class RobotContainer {
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
       new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
-    
+      Trajectory tragSpeakerNoteToAmpShooting = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      Trajectory tragAmpShootingToAmpNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+      new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+
+      
     SwerveControllerCommand originToStageNote = new SwerveControllerCommand(
         tragOriginToStageNote, 
         swerveSubsystem::getPose, // Coords
@@ -230,6 +240,26 @@ public class RobotContainer {
 
       SwerveControllerCommand speakerShootingToSpeakerNote = new SwerveControllerCommand(
         tragSpeakerShootingToSpeakerNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      SwerveControllerCommand speakerNoteToAmpShooting = new SwerveControllerCommand(
+        tragSpeakerNoteToAmpShooting, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+      
+      SwerveControllerCommand ampShootingToAmpNote = new SwerveControllerCommand(
+        tragAmpShootingToAmpNote, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -295,7 +325,6 @@ public class RobotContainer {
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToStageNote.getInitialPose())),
         originToStageNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragStageNoteToSpeakerShooting.getInitialPose())),
         stageNoteToSpeakerShooting,
         new WaitCommand(0.25),
@@ -303,6 +332,7 @@ public class RobotContainer {
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerShootingToSpeakerNote.getInitialPose())),
         speakerShootingToSpeakerNote,
         new InstantCommand(() -> swerveSubsystem.stopModules())
+        
         );
 
     }else{
