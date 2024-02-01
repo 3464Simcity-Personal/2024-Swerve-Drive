@@ -216,6 +216,10 @@ public class RobotContainer {
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
       new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
+      Trajectory tragAmpNoteRotateToSpeaker = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+      new Pose2d(0, 0, Rotation2d.fromDegrees(25))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
 
       
     SwerveControllerCommand originToStageNote = new SwerveControllerCommand(
@@ -268,6 +272,17 @@ public class RobotContainer {
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
     
+      SwerveControllerCommand ampNoteRotateToSpeaker = new SwerveControllerCommand(
+        tragAmpNoteRotateToSpeaker, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+    
+      
 
     // Start HERE:
     if (commandChooser.getSelected() == "R3A"){
@@ -342,7 +357,12 @@ public class RobotContainer {
         new WaitCommand(0.125),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpShootingToAmpNote.getInitialPose())),
         ampShootingToAmpNote,
-        new InstantCommand(() -> swerveSubsystem.stopModules())
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        // Rotate to speaker
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteRotateToSpeaker.getInitialPose())),
+        ampNoteRotateToSpeaker,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25)
         );
 
     }else{
