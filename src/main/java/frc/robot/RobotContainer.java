@@ -200,8 +200,8 @@ public class RobotContainer {
    
       Trajectory tragStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
       Trajectory tragSpeakerShootingToSpeakerNote = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
@@ -209,8 +209,8 @@ public class RobotContainer {
 
       Trajectory tragSpeakerNoteToAmpShooting = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.508, 1.2954, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
       Trajectory tragAmpShootingToAmpNote = TrajectoryGenerator.generateTrajectory(
       List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
@@ -330,6 +330,7 @@ public class RobotContainer {
         stageNoteToSpeakerShooting,
         new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.125),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerShootingToSpeakerNote.getInitialPose())),
         speakerShootingToSpeakerNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
@@ -338,6 +339,7 @@ public class RobotContainer {
         speakerNoteToAmpShooting,
         new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.125),
         new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpShootingToAmpNote.getInitialPose())),
         ampShootingToAmpNote,
         new InstantCommand(() -> swerveSubsystem.stopModules())
