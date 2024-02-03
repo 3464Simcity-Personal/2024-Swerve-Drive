@@ -403,15 +403,14 @@ public class RobotContainer {
           blueAmpNToAmp,
           new InstantCommand(() -> swerveSubsystem.stopModules()),
           new WaitCommand(0.25),
-          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpToHailMaryNote.getInitialPose())),
-          blueAmpToRightmostNote,
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpToSpeakerNote.getInitialPose())),
+          blueAmpToSpeaker,
           new InstantCommand(() -> swerveSubsystem.stopModules()),
           new WaitCommand(0.25),
-          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueHailMaryNoteToAmpM1.getInitialPose())),
-          new WaitCommand(0.25),
-          blueRightmostNoteToAmpM1,
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueSpeakerNoteToAmp.getInitialPose())),
+          blueSpeakerNoteToAmp,
           new InstantCommand(() -> swerveSubsystem.stopModules())
-        );
+          );  
     } else{
         selectedAuto = null;
     }
