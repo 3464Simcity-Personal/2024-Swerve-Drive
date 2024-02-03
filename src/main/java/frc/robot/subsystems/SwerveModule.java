@@ -60,6 +60,8 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.setInverted(driveMotorReversed);
     driveMotor.setSmartCurrentLimit(30);
     turningMotor.setInverted(turningMotorReversed);
+    turningMotor.setSmartCurrentLimit(30);
+
 
     driveEncoder = driveMotor.getEncoder();
     turningEncoder = turningMotor.getEncoder();
