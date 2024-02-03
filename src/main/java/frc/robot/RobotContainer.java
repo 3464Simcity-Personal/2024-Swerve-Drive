@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.RumbleCMD;
 import frc.robot.commands.SwerveJoystickCMD;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -36,6 +37,7 @@ public class RobotContainer {
   private final XboxController xbox = new XboxController(3);
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final RumbleCMD rumbleDude = new RumbleCMD(swerveSubsystem);
   private final InstantCommand resetGyro = new InstantCommand(swerveSubsystem::zeroHeading, swerveSubsystem);
   // private final InstantCommand resetLocation = new InstantCommand(swerveSubsystem::resetOdom)
   private final SwerveJoystickCMD swerveCMD = new SwerveJoystickCMD(swerveSubsystem,
@@ -52,11 +54,14 @@ public class RobotContainer {
     commandChooser.addOption("Red 3 Speaker", "R3S");
     SmartDashboard.putData("Auto", commandChooser);
     CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, swerveCMD);
+    CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, rumbleDude);
     configureBindings();
   }
 
  
   private void configureBindings() {
+    // Constants.OperatorCo-nstants.buttonB.onTrue(new InstantCommand(() -> swerveSubsystem.rumbleDude(0)));
+    // Constants.OperatorConstants.buttonB.onFalse(new InstantCommand(() -> swerveSubsystem.rumbleDude(0)));
     Constants.OperatorConstants.buttonX.onTrue(resetGyro);
     Constants.OperatorConstants.buttonY.onTrue(new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)))));
   }

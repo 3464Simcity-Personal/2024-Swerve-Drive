@@ -14,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,6 +60,7 @@ public class SwerveSubsystem extends SubsystemBase {
     DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+  private final XboxController xbox = new XboxController(3);
 
   // Odemeter to track robot position and create feedback speeds in auto. 
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
@@ -120,6 +123,11 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.getPosition()
       },
       pose /* Where the robot is on the field */);  
+  }
+
+  public void rumbleDude(double speed) {
+    xbox.setRumble(RumbleType.kBothRumble, speed);
+    System.out.println(speed);
   }
   
   @Override

@@ -122,6 +122,9 @@ public static final class AutoConstants {
           new TrapezoidProfile.Constraints(
                   kMaxAngularSpeedRadiansPerSecond,
                   kMaxAngularAccelerationRadiansPerSecondSquared);
+    
+
+    
 }
 
 public static final class OIConstants {
@@ -142,5 +145,6 @@ public static final class OIConstants {
     public static final XboxController xbox = new XboxController(3);
     public static final JoystickButton buttonX = new JoystickButton(xbox, 3);
     public static final JoystickButton buttonY = new JoystickButton(xbox, 4);
+    public static final JoystickButton buttonB = new JoystickButton(xbox, 2);
   }
 }
