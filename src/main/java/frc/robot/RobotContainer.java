@@ -411,6 +411,31 @@ public class RobotContainer {
           blueSpeakerNoteToAmp,
           new InstantCommand(() -> swerveSubsystem.stopModules())
           );  
+    }else if (commandChooser.getSelected() == "B3AHM"){
+      selectedAuto = new SequentialCommandGroup(
+        // Reset odometry to starting pose. 
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueOriginToAmp.getInitialPose())),
+        blueOrginToAmp,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpToAmpNote.getInitialPose())),
+        blueAmpToAmpN,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpNoteToAmp.getInitialPose())),
+        blueAmpNToAmp,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpToHailMaryNote.getInitialPose())),
+        blueAmpToRightmostNote,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueHailMaryNoteToAmpM1.getInitialPose())),
+        new WaitCommand(0.25),
+        blueRightmostNoteToAmpM1,
+        new InstantCommand(() -> swerveSubsystem.stopModules())
+      );      
+
     } else{
         selectedAuto = null;
     }
