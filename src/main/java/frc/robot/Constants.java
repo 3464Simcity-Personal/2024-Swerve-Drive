@@ -253,6 +253,40 @@ public static final class TragConstants {
         List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
         new Pose2d(-0.1, 0, Rotation2d.fromDegrees(25))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
+      /*
+       * 
+       * Blue Alliance
+       * 
+       */
+
+      public static final Trajectory tragBlueOriginToStageNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.508, 1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(1.3462, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+   
+      public static final Trajectory tragBlueStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueSpeakerShootingToSpeakerNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueSpeakerNoteToAmpShooting = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueAmpShootingToAmpNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueAmpNoteRotateToSpeaker = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.1, 0, Rotation2d.fromDegrees(-25))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+      
+
 }
 
 public static final class OIConstants {

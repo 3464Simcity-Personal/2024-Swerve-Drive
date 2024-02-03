@@ -11,15 +11,10 @@ import frc.robot.Constants.TragConstants;
 import frc.robot.commands.SwerveJoystickCMD;
 import frc.robot.subsystems.SwerveSubsystem;
 
-import java.util.List;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,6 +47,9 @@ public class RobotContainer {
     commandChooser.addOption("Red 3 Amp Hail Mary", "R3AHM");
     commandChooser.addOption("Red 3 Speaker", "R3S");
     commandChooser.addOption("Blue 3 Amp", "B3A");
+    commandChooser.addOption("Blue 3 Amp Hail Mary", "B3AHM");
+    commandChooser.addOption("Blue 3 Speaker", "B3S");
+
     SmartDashboard.putData("Auto", commandChooser);
     CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, swerveCMD);
     configureBindings();
@@ -65,10 +63,10 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // Trajectory Config for settings such as speed. 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-          .setKinematics(DriveConstants.kDriveKinematics);
+    // TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+    //     AutoConstants.kMaxSpeedMetersPerSecond,
+    //     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+    //       .setKinematics(DriveConstants.kDriveKinematics);
 
    
       // define pid controllers for tracking trajectory = creates speeds to correct for error. 
@@ -303,6 +301,69 @@ public class RobotContainer {
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
     
+    /*
+    * Blue Alliance SPEAKER
+    */ 
+    
+    SwerveControllerCommand blueOriginToStageNote = new SwerveControllerCommand(
+        TragConstants.tragBlueOriginToStageNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+        
+    SwerveControllerCommand blueStageNoteToSpeakerShooting = new SwerveControllerCommand(
+        TragConstants.tragBlueStageNoteToSpeakerShooting, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      SwerveControllerCommand blueSpeakerShootingToSpeakerNote = new SwerveControllerCommand(
+        TragConstants.tragBlueSpeakerShootingToSpeakerNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+
+      SwerveControllerCommand blueSpeakerNoteToAmpShooting = new SwerveControllerCommand(
+        TragConstants.tragBlueSpeakerNoteToAmpShooting, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+      
+      SwerveControllerCommand blueAmpShootingToAmpNote = new SwerveControllerCommand(
+        TragConstants.tragBlueAmpShootingToAmpNote, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
+    
+      SwerveControllerCommand blueAmpNoteRotateToSpeaker = new SwerveControllerCommand(
+        TragConstants.tragBlueAmpNoteRotateToSpeaker, 
+        swerveSubsystem::getPose, // Coords
+        DriveConstants.kDriveKinematics, 
+        xController, 
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
+        swerveSubsystem);
       
 
     // Start HERE:
@@ -411,6 +472,7 @@ public class RobotContainer {
           blueSpeakerNoteToAmp,
           new InstantCommand(() -> swerveSubsystem.stopModules())
           );  
+
     }else if (commandChooser.getSelected() == "B3AHM"){
       selectedAuto = new SequentialCommandGroup(
         // Reset odometry to starting pose. 
@@ -434,9 +496,42 @@ public class RobotContainer {
         new WaitCommand(0.25),
         blueRightmostNoteToAmpM1,
         new InstantCommand(() -> swerveSubsystem.stopModules())
-      );      
+      );       
 
-    } else{
+    }else if(commandChooser.getSelected() == "B3S"){
+      selectedAuto = new SequentialCommandGroup(
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueOriginToStageNote.getInitialPose())),
+        blueOriginToStageNote,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        // Go to Speaker Note
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueStageNoteToSpeakerShooting.getInitialPose())),
+        blueStageNoteToSpeakerShooting,
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueSpeakerShootingToSpeakerNote.getInitialPose())),
+        blueSpeakerShootingToSpeakerNote,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+
+        // Go to Amp Note
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueSpeakerNoteToAmpShooting.getInitialPose())),
+        blueSpeakerNoteToAmpShooting,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpShootingToAmpNote.getInitialPose())),
+        blueAmpShootingToAmpNote,
+        new InstantCommand(() -> swerveSubsystem.stopModules()),
+        new WaitCommand(0.25),
+        // Rotate to speaker
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpNoteRotateToSpeaker.getInitialPose())),
+        blueAmpNoteRotateToSpeaker,
+        new InstantCommand(() -> swerveSubsystem.stopModules())
+        // new WaitCommand(0.25)
+        );
+    
+      } else{
         selectedAuto = null;
     }
 
