@@ -99,10 +99,7 @@ public final class Constants {
     public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = -0.4924 + 0.5;
     public static final double kBackRightDriveAbsoluteEncoderOffsetRad = -0.3937;
 
-    // public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.0;
-    // public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = -0.0;
-    // public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = -0.0;
-    // public static final double kBackRightDriveAbsoluteEncoderOffsetRad = -0.0;
+
 
     // Robot Speed Constraints
     public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
@@ -185,32 +182,32 @@ public static final class TragConstants {
      */
     
       public static final Trajectory tragOriginToStageNote = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0.508, -1.4478, Rotation2d.fromDegrees(0)),
-      new Pose2d(1.3462, -1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.508, -1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(1.3462, -1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
    
       public static final Trajectory tragStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
       public static final Trajectory tragSpeakerShootingToSpeakerNote = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
       public static final Trajectory tragSpeakerNoteToAmpShooting = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
       public static final Trajectory tragAmpShootingToAmpNote = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
 
       public static final Trajectory tragAmpNoteRotateToSpeaker = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.1, 0, Rotation2d.fromDegrees(25))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-      
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.1, 0, Rotation2d.fromDegrees(25))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
 }
 
 public static final class OIConstants {
