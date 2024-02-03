@@ -4,8 +4,15 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
@@ -122,6 +129,65 @@ public static final class AutoConstants {
           new TrapezoidProfile.Constraints(
                   kMaxAngularSpeedRadiansPerSecond,
                   kMaxAngularAccelerationRadiansPerSecondSquared);
+
+  public static final TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+    AutoConstants.kMaxSpeedMetersPerSecond,
+    AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+      .setKinematics(DriveConstants.kDriveKinematics);
+
+
+}
+
+
+public static final class TragConstants {
+  /*
+   * 
+   * AMP Trajectories
+   */
+    public static final Trajectory tragOriginToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.427, 0.451, Rotation2d.fromDegrees(-90))), AutoConstants.trajectoryConfig); // Apply trajectory settings to path
+
+    public static final Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.9, -0.6, Rotation2d.fromDegrees(-40)),
+      new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-40))), AutoConstants.trajectoryConfig);
+      
+    public static final Trajectory tragAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-40)), 
+      new Pose2d(-0.9, 0.6, Rotation2d.fromDegrees(90)),
+      new Pose2d(-1.03, 0.74, Rotation2d.fromDegrees(-90))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragAmpToSpeakerNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.5, -2.178, Rotation2d.fromDegrees(-90)),
+      new Pose2d(1.055, -2.178, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragSpeakerNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.8, 1.2, Rotation2d.fromDegrees(-90)),
+      new Pose2d(-1.055, 2.2, Rotation2d.fromDegrees(-90))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragAmpToHailMaryNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)),
+      new Pose2d(5.5, -0.282, Rotation2d.fromDegrees(0)),
+      new Pose2d(6.424, -0.282, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig);
+    
+    public static final Trajectory tragHailMaryNoteToAmpM1 = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+      new Pose2d(-6.4, -0.5, Rotation2d.fromDegrees(180)),
+      new Pose2d(-6.4, 0.283, Rotation2d.fromDegrees(270))), AutoConstants.trajectoryConfig);
+
+    /*
+     * 
+     * SPEAKER Trajectories
+     * 
+     */
+
+
+
+
+
 }
 
 public static final class OIConstants {
