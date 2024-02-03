@@ -158,37 +158,8 @@ public class RobotContainer {
 
     // ------------------- Points relative to speaker ----------------------- //
 
-    Trajectory tragOriginToStageNote = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0.508, -1.4478, Rotation2d.fromDegrees(0)),
-      new Pose2d(1.3462, -1.4478, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-   
-      Trajectory tragStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-
-      Trajectory tragSpeakerShootingToSpeakerNote = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-
-      Trajectory tragSpeakerNoteToAmpShooting = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
-      new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-
-      Trajectory tragAmpShootingToAmpNote = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-
-      Trajectory tragAmpNoteRotateToSpeaker = TrajectoryGenerator.generateTrajectory(
-      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-      new Pose2d(-0.1, 0, Rotation2d.fromDegrees(25))), trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
-
-
-      
     SwerveControllerCommand originToStageNote = new SwerveControllerCommand(
-        tragOriginToStageNote, 
+        TragConstants.tragOriginToStageNote, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -198,7 +169,7 @@ public class RobotContainer {
         swerveSubsystem);
         
     SwerveControllerCommand stageNoteToSpeakerShooting = new SwerveControllerCommand(
-        tragStageNoteToSpeakerShooting, 
+        TragConstants.tragStageNoteToSpeakerShooting, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -208,7 +179,7 @@ public class RobotContainer {
         swerveSubsystem);
 
       SwerveControllerCommand speakerShootingToSpeakerNote = new SwerveControllerCommand(
-        tragSpeakerShootingToSpeakerNote, 
+        TragConstants.tragSpeakerShootingToSpeakerNote, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -218,8 +189,7 @@ public class RobotContainer {
         swerveSubsystem);
 
       SwerveControllerCommand speakerNoteToAmpShooting = new SwerveControllerCommand(
-        tragSpeakerNoteToAmpShooting, 
-    
+        TragConstants.tragSpeakerNoteToAmpShooting, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -229,7 +199,7 @@ public class RobotContainer {
         swerveSubsystem);
       
       SwerveControllerCommand ampShootingToAmpNote = new SwerveControllerCommand(
-        tragAmpShootingToAmpNote, 
+        TragConstants.tragAmpShootingToAmpNote, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -239,7 +209,7 @@ public class RobotContainer {
         swerveSubsystem);
     
       SwerveControllerCommand ampNoteRotateToSpeaker = new SwerveControllerCommand(
-        tragAmpNoteRotateToSpeaker, 
+        TragConstants.tragAmpNoteRotateToSpeaker, 
         swerveSubsystem::getPose, // Coords
         DriveConstants.kDriveKinematics, 
         xController, 
@@ -303,32 +273,32 @@ public class RobotContainer {
         );
     }else if(commandChooser.getSelected() == "R3S"){
       selectedAuto = new SequentialCommandGroup(
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragOriginToStageNote.getInitialPose())),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragOriginToStageNote.getInitialPose())),
         originToStageNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
         new WaitCommand(0.25),
         // Go to Speaker Note
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragStageNoteToSpeakerShooting.getInitialPose())),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragStageNoteToSpeakerShooting.getInitialPose())),
         stageNoteToSpeakerShooting,
         new WaitCommand(0.25),
         new InstantCommand(() -> swerveSubsystem.stopModules()),
         new WaitCommand(0.25),
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerShootingToSpeakerNote.getInitialPose())),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragSpeakerShootingToSpeakerNote.getInitialPose())),
         speakerShootingToSpeakerNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
         new WaitCommand(0.25),
 
         // Go to Amp Note
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragSpeakerNoteToAmpShooting.getInitialPose())),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragSpeakerNoteToAmpShooting.getInitialPose())),
         speakerNoteToAmpShooting,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
         new WaitCommand(0.25),
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpShootingToAmpNote.getInitialPose())),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragAmpShootingToAmpNote.getInitialPose())),
         ampShootingToAmpNote,
         new InstantCommand(() -> swerveSubsystem.stopModules()),
         new WaitCommand(0.25),
         // Rotate to speaker
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(tragAmpNoteRotateToSpeaker.getInitialPose())),
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragAmpNoteRotateToSpeaker.getInitialPose())),
         ampNoteRotateToSpeaker,
         new InstantCommand(() -> swerveSubsystem.stopModules())
         // new WaitCommand(0.25)
