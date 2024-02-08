@@ -113,9 +113,9 @@ public final class Constants {
 }
 
 public static final class AutoConstants {
-  public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 3;
+  public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;
   public static final double kMaxAngularSpeedRadiansPerSecond = //
-          DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
+          DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 3;
   public static final double kMaxAccelerationMetersPerSecondSquared = 3;
   public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 3;
   public static final double kPXController = 1.5;
