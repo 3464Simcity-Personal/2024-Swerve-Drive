@@ -155,6 +155,18 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Back Left Relative Encoder", Units.radiansToDegrees(backLeft.getTurningPosition()));
     SmartDashboard.putNumber("Back Right Relative Encoder", Units.radiansToDegrees(backRight.getTurningPosition()));
 
+
+    SmartDashboard.putNumber("Front Left Drive Current", frontLeft.getDriveCurrent());
+    SmartDashboard.putNumber("Front Right Drive Current", frontRight.getDriveCurrent());
+    SmartDashboard.putNumber("Back Left Drive Current", backLeft.getDriveCurrent());
+    SmartDashboard.putNumber("Back Right Drive Current", backRight.getDriveCurrent());
+    
+    SmartDashboard.putNumber("Front Left Turn Current", frontLeft.getTurnCurrent());
+    SmartDashboard.putNumber("Front Right Turn Current", frontRight.getTurnCurrent());
+    SmartDashboard.putNumber("Back Left Turn Current", backLeft.getTurnCurrent());
+    SmartDashboard.putNumber("Back Right Turn Current", backRight.getTurnCurrent());
+
+
     // SmartDashboard.putNumber("Front Left Drive Position", frontLeft.getDrivePosition());
     // SmartDashboard.putNumber("Front Right Drive Position", frontRight.getDrivePosition());
     // SmartDashboard.putNumber("Back Left Drive Position", backLeft.getDrivePosition());

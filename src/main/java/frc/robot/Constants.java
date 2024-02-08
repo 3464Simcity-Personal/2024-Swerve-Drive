@@ -4,8 +4,15 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
@@ -92,36 +99,204 @@ public final class Constants {
     public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = -0.4924 + 0.5;
     public static final double kBackRightDriveAbsoluteEncoderOffsetRad = -0.3937;
 
-    // public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.0;
-    // public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = -0.0;
-    // public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = -0.0;
-    // public static final double kBackRightDriveAbsoluteEncoderOffsetRad = -0.0;
+
 
     // Robot Speed Constraints
     public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
     public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-    public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
+    public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1.75;
     public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
-            kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
+            kPhysicalMaxAngularSpeedRadiansPerSecond / 2.75;
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 }
 
 public static final class AutoConstants {
-  public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4;
+  public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;
   public static final double kMaxAngularSpeedRadiansPerSecond = //
-          DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10;
+          DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 3;
   public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-  public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
+  public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 3;
   public static final double kPXController = 1.5;
-  public static final double kPYController = 1.5;
+  public static final double kPYController = 0.9;
   public static final double kPThetaController = 3.75 ;
 
   public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
           new TrapezoidProfile.Constraints(
                   kMaxAngularSpeedRadiansPerSecond,
                   kMaxAngularAccelerationRadiansPerSecondSquared);
+
+  public static final TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+    AutoConstants.kMaxSpeedMetersPerSecond,
+    AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+      .setKinematics(DriveConstants.kDriveKinematics);
+
+
+}
+
+
+public static final class TragConstants {
+  /*
+   * AMP Trajectories
+   */
+
+    public static final Trajectory tragOriginToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.427, 0.451, Rotation2d.fromDegrees(-90))), AutoConstants.trajectoryConfig); // Apply trajectory settings to path
+
+    public static final Trajectory tragAmpToAmpNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.9, -0.6, Rotation2d.fromDegrees(-40)),
+      new Pose2d(1.03, -0.74, Rotation2d.fromDegrees(-40))), AutoConstants.trajectoryConfig);
+      
+    public static final Trajectory tragAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-40)), 
+      new Pose2d(-0.9, 0.6, Rotation2d.fromDegrees(90)),
+      new Pose2d(-1.03, 0.74, Rotation2d.fromDegrees(-90))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragAmpToSpeakerNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)), 
+      new Pose2d(0.5, -2.178, Rotation2d.fromDegrees(-90)),
+      new Pose2d(1.055, -2.178, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragSpeakerNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.8, 1.2, Rotation2d.fromDegrees(-90)),
+      new Pose2d(-1.055, 2.2, Rotation2d.fromDegrees(-90))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragAmpToHailMaryNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)),
+      new Pose2d(5.5, -0.282, Rotation2d.fromDegrees(0)),
+      new Pose2d(6.424, -0.282, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig);
+    
+    public static final Trajectory tragHailMaryNoteToAmpM1 = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+      new Pose2d(-6.4, -0.5, Rotation2d.fromDegrees(180)),
+      new Pose2d(-6.4, 0.283, Rotation2d.fromDegrees(270))), AutoConstants.trajectoryConfig);
+
+
+    /*
+     * 
+     * Blue Alliance AMP Trajectories
+     * 
+     */
+
+    
+    public static final Trajectory tragBlueOriginToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
+      new Pose2d(0.427, -0.451, Rotation2d.fromDegrees(90))), AutoConstants.trajectoryConfig); // Apply trajectory settings to path
+
+    public static final Trajectory tragBlueAmpToAmpNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
+      new Pose2d(0.9, 0.6, Rotation2d.fromDegrees(40)),
+      new Pose2d(1.03, 0.74, Rotation2d.fromDegrees(40))), AutoConstants.trajectoryConfig);
+      
+    public static final Trajectory tragBlueAmpNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(40)), 
+      new Pose2d(-0.9, -0.6, Rotation2d.fromDegrees(-90)),
+      new Pose2d(-1.03, -0.74, Rotation2d.fromDegrees(90))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragBlueAmpToSpeakerNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
+      new Pose2d(0.5, 2.178, Rotation2d.fromDegrees(90)),
+      new Pose2d(1.055, 2.178, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragBlueSpeakerNoteToAmp = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      new Pose2d(-0.8, -1.2, Rotation2d.fromDegrees(90)),
+      new Pose2d(-1.055, -2.2, Rotation2d.fromDegrees(90))), AutoConstants.trajectoryConfig);
+
+    public static final Trajectory tragBlueAmpToHailMaryNote = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)),
+      new Pose2d(5.5, 0.282, Rotation2d.fromDegrees(0)),
+      new Pose2d(6.424, 0.282, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig);
+    
+    public static final Trajectory tragBlueHailMaryNoteToAmpM1 = TrajectoryGenerator.generateTrajectory(
+      List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+      new Pose2d(-6.4, 0.5, Rotation2d.fromDegrees(-180)),
+      new Pose2d(-6.4, -0.283, Rotation2d.fromDegrees(-270))), AutoConstants.trajectoryConfig);
+
+    
+
+
+    /*
+     * 
+     * SPEAKER Trajectories
+     * 
+     */
+    
+      public static final Trajectory tragOriginToStageNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.508, -1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(1.3462, -1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+   
+      public static final Trajectory tragStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragSpeakerShootingToSpeakerNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragSpeakerNoteToAmpShooting = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragAmpShootingToAmpNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragAmpNoteRotateToSpeaker = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.1, 0, Rotation2d.fromDegrees(25))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      /*
+       * 
+       * Blue Alliance Speaker
+       * 
+       */
+
+      public static final Trajectory tragBlueOriginToStageNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.508, 1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(1.3462, 1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+   
+      public static final Trajectory tragBlueStageNoteToSpeakerShooting = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueSpeakerShootingToSpeakerNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueSpeakerNoteToAmpShooting = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0)),
+        new Pose2d(-0.508, -1.4478, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueAmpShootingToAmpNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+
+      public static final Trajectory tragBlueAmpNoteRotateToSpeaker = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(-0.1, 0, Rotation2d.fromDegrees(-25))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+      
+
+    /*
+     * 2 Note Center Hail Mary
+     * 
+     */
+    public static final Trajectory tragOriginToFarCenterNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-45)), 
+        new Pose2d(6.9342, -3.4798, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+  
+
+
 }
 
 public static final class OIConstants {
@@ -141,5 +316,6 @@ public static final class OIConstants {
     public static final JoystickButton button2 = new JoystickButton(auxStick, 2);
     public static final XboxController xbox = new XboxController(3);
     public static final JoystickButton buttonX = new JoystickButton(xbox, 3);
+    public static final JoystickButton buttonY = new JoystickButton(xbox, 4);
   }
 }

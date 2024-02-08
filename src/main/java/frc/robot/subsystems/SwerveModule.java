@@ -58,7 +58,10 @@ public class SwerveModule extends SubsystemBase {
     turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
 
     driveMotor.setInverted(driveMotorReversed);
+    driveMotor.setSmartCurrentLimit(30);
     turningMotor.setInverted(turningMotorReversed);
+    turningMotor.setSmartCurrentLimit(30);
+
 
     driveEncoder = driveMotor.getEncoder();
     turningEncoder = turningMotor.getEncoder();
@@ -116,6 +119,15 @@ public class SwerveModule extends SubsystemBase {
   public SwerveModuleState getState() {
     return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition())); 
   }
+
+  public double getDriveCurrent(){
+    return driveMotor.getOutputCurrent();
+  }
+
+  public double getTurnCurrent(){
+    return turningMotor.getOutputCurrent();
+  }
+
 
   // Method that translate desired state to angle rotations and speed. 
   public void setDesiredState(SwerveModuleState state) {
