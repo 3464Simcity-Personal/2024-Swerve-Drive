@@ -113,9 +113,9 @@ public final class Constants {
 }
 
 public static final class AutoConstants {
-  public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 3;
+  public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;
   public static final double kMaxAngularSpeedRadiansPerSecond = //
-          DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
+          DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 3;
   public static final double kMaxAccelerationMetersPerSecondSquared = 3;
   public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 3;
   public static final double kPXController = 1.5;
@@ -255,7 +255,7 @@ public static final class TragConstants {
 
       /*
        * 
-       * Blue Alliance
+       * Blue Alliance Speaker
        * 
        */
 
@@ -286,6 +286,16 @@ public static final class TragConstants {
         List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
         new Pose2d(-0.1, 0, Rotation2d.fromDegrees(-25))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
       
+
+    /*
+     * 2 Note Center Hail Mary
+     * 
+     */
+    public static final Trajectory tragOriginToFarCenterNote = TrajectoryGenerator.generateTrajectory(
+        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(-45)), 
+        new Pose2d(6.9342, -3.4798, Rotation2d.fromDegrees(0))), AutoConstants.trajectoryConfig); // change X to 1.3464 because team spirit and nationalism 
+  
+
 
 }
 
