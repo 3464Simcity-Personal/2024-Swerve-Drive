@@ -43,9 +43,12 @@ public class RobotContainer {
 
   public RobotContainer() {
     // where we set the options that user has to choose for autos 
+    // Red Autos
     commandChooser.setDefaultOption("Red 3 Amp ", "R3A");
     commandChooser.addOption("Red 3 Amp Hail Mary", "R3AHM");
     commandChooser.addOption("Red 3 Speaker", "R3S");
+    commandChooser.addOption("Red Center Hail Mary", "RCHM");    
+    // Blue Autos
     commandChooser.addOption("Blue 3 Amp", "B3A");
     commandChooser.addOption("Blue 3 Amp Hail Mary", "B3AHM");
     commandChooser.addOption("Blue 3 Speaker", "B3S");
@@ -364,6 +367,22 @@ public class RobotContainer {
         thetaController,
         swerveSubsystem::setModuleStates, // Function to translate speeds to the modules
         swerveSubsystem);
+
+      /*
+       * 
+       * Hail Mary Note
+       * 
+       */
+
+      SwerveControllerCommand originToFarCenterNote = new SwerveControllerCommand(
+        TragConstants.tragOriginToFarCenterNote, 
+        swerveSubsystem::getPose,
+        DriveConstants.kDriveKinematics,
+        xController,
+        yController, 
+        thetaController, 
+        swerveSubsystem::setModuleStates,
+        swerveSubsystem);
       
 
     // Start HERE:
@@ -498,39 +517,47 @@ public class RobotContainer {
         new InstantCommand(() -> swerveSubsystem.stopModules())
       );       
 
-    }else if(commandChooser.getSelected() == "B3S"){
-      selectedAuto = new SequentialCommandGroup(
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueOriginToStageNote.getInitialPose())),
-        blueOriginToStageNote,
-        new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.25),
-        // Go to Speaker Note
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueStageNoteToSpeakerShooting.getInitialPose())),
-        blueStageNoteToSpeakerShooting,
-        new WaitCommand(0.25),
-        new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.25),
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueSpeakerShootingToSpeakerNote.getInitialPose())),
-        blueSpeakerShootingToSpeakerNote,
-        new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.25),
+      }else if(commandChooser.getSelected() == "B3S"){
+        selectedAuto = new SequentialCommandGroup(
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueOriginToStageNote.getInitialPose())),
+          blueOriginToStageNote,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          // Go to Speaker Note
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueStageNoteToSpeakerShooting.getInitialPose())),
+          blueStageNoteToSpeakerShooting,
+          new WaitCommand(0.25),
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueSpeakerShootingToSpeakerNote.getInitialPose())),
+          blueSpeakerShootingToSpeakerNote,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+  
+          // Go to Amp Note
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueSpeakerNoteToAmpShooting.getInitialPose())),
+          blueSpeakerNoteToAmpShooting,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpShootingToAmpNote.getInitialPose())),
+          blueAmpShootingToAmpNote,
+          new InstantCommand(() -> swerveSubsystem.stopModules()),
+          new WaitCommand(0.25),
+          // Rotate to speaker
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpNoteRotateToSpeaker.getInitialPose())),
+          blueAmpNoteRotateToSpeaker,
+          new InstantCommand(() -> swerveSubsystem.stopModules())
+          // new WaitCommand(0.25)
+          );
+      
+      }else if(commandChooser.getSelected() == "RCHM"){
+          selectedAuto = new SequentialCommandGroup(
+            new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragOriginToFarCenterNote.getInitialPose())),
+            originToFarCenterNote,
+            new InstantCommand(() -> swerveSubsystem.stopModules())
+            );
 
-        // Go to Amp Note
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueSpeakerNoteToAmpShooting.getInitialPose())),
-        blueSpeakerNoteToAmpShooting,
-        new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.25),
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpShootingToAmpNote.getInitialPose())),
-        blueAmpShootingToAmpNote,
-        new InstantCommand(() -> swerveSubsystem.stopModules()),
-        new WaitCommand(0.25),
-        // Rotate to speaker
-        new InstantCommand(() -> swerveSubsystem.resetOdometry(TragConstants.tragBlueAmpNoteRotateToSpeaker.getInitialPose())),
-        blueAmpNoteRotateToSpeaker,
-        new InstantCommand(() -> swerveSubsystem.stopModules())
-        // new WaitCommand(0.25)
-        );
-    
+
       } else{
         selectedAuto = null;
     }
